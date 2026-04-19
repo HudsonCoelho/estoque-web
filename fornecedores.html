@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Controle de Estoque</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+[]
+
+<body>
+  <div class="app-container">
+
+    <!-- Menu Lateral -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h3>Controle de Estoque</h3>
+        <p>Sistema de gestão</p>
+      </div>
+
+      <ul class="sidebar-nav">
+        <li><a href="index.html"><span class="nav-icon">🏠</span> <span>Início</span></a></li>
+        <li><a href="entradas.html"><span class="nav-icon">📥</span> <span>Entradas</span></a></li>
+        <li><a href="saidas.html"><span class="nav-icon">📤</span> <span>Saídas</span></a></li>
+        <li><a href="produtos.html"><span class="nav-icon">📦</span> <span>Produtos</span></a></li>
+        <li><a href="fornecedores.html" class="active"><span class="nav-icon">🏢</span> <span>Fornecedores</span></a>
+        </li>
+        <li><a href="relatorios.html"><span class="nav-icon">📊</span> <span>Relatórios</span></a></li>
+      </ul>
+    </aside>
+
+    <!-- Conteúdo -->
+    <main class="main-content">
+
+      <div class="dashboard-container">
+
+        <div class="content-area">
+          <h1>Fornecedores</h1>
+
+          <form id="formFornecedor" class="form-group">
+
+            <h3>🏢 Cadastro</h3>
+
+            <div>
+              <label>Nome</label>
+              <input type="text" id="nome_fornecedor" required>
+            </div>
+
+            <div>
+              <label>CNPJ</label>
+              <input type="text" id="cnpj" required>
+            </div>
+
+            <div>
+              <label>Telefone</label>
+              <input type="text" id="telefone">
+            </div>
+
+            <div>
+              <label>Email</label>
+              <input type="email" id="email">
+            </div>
+
+            <div style="grid-column: span 2;">
+              <label>Endereço</label>
+              <input type="text" id="endereco">
+            </div>
+
+            <button type="submit">Salvar</button>
+          </form>
+        </div>
+
+        <!-- CARDS -->
+        <aside class="summary-panel">
+          <div class="summary-card">
+            <span class="card-icon">🏢</span>
+            <div class="card-info">
+              <h4>Fornecedores</h4>
+              <p class="card-value" id="total-fornecedores">0</p>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+
+      <!-- LISTA E BUSCA -->
+      <h2 class="titulo-lista">📋 Lista de Fornecedores</h2>
+      <div class="busca-produtos">
+        <input type="text" id="inputBuscaFornecedor" placeholder="Buscar fornecedor por nome ou CNPJ...">
+      </div>
+      <div id="lista-fornecedores"
+        style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;"></div>
+
+      <!-- MODAL DE EDIÇÃO FORNECEDOR -->
+      <div id="modalEdicaoFornecedor" class="modal-edicao">
+        <div class="modal-conteudo">
+          <div class="modal-header">
+            <h2>Editar Fornecedor</h2>
+            <button type="button" class="modal-fechar" onclick="fecharModalFornecedor()">&times;</button>
+          </div>
+          <form id="formEdicaoFornecedor" class="form-group">
+            <div>
+              <label>Nome</label>
+              <input type="text" id="modal-forn-nome" required class="input-edit">
+            </div>
+            <div>
+              <label>CNPJ</label>
+              <input type="text" id="modal-forn-cnpj" required class="input-edit">
+            </div>
+            <div>
+              <label>Telefone</label>
+              <input type="text" id="modal-forn-telefone" class="input-edit">
+            </div>
+            <div>
+              <label>Email</label>
+              <input type="email" id="modal-forn-email" class="input-edit">
+            </div>
+            <div style="grid-column: span 2;">
+              <label>Endereço</label>
+              <input type="text" id="modal-forn-endereco" class="input-edit">
+            </div>
+            <div style="grid-column: span 2; display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px;">
+              <button type="button" class="btn-cancelar-modal" onclick="fecharModalFornecedor()">Cancelar</button>
+              <button type="submit" class="btn-salvar-modal">Salvar Alterações</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <footer>© 2026 - Controle de Estoque - Desenvolvido por Gabriela, Pedro, Matheus, Murilo e Hudson ©</footer>
+
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>

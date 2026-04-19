@@ -1,0 +1,114 @@
+        VISAO GERAL
+
+produtos
+entradas
+saidas
+fornecedores
+comunicação api
+
+TABELA: produtos
+=========================================
+CAMPO               TIPO            DESCRIÇÃO
+------------------------------------------
+id                  INT             Chave primária, auto incremento
+codigo_barras       VARCHAR(50)     Código de barras do produto
+url_imagem          VARCHAR(200)    URL da imagem do produto
+nome                VARCHAR(200)    Nome do produto (obrigatório)
+descricao           VARCHAR(200)    Descrição do produto
+categoria           VARCHAR(50)     Categoria do produto
+quantidade          INT             Quantidade atual em estoque
+preco_compra        DECIMAL(10,2)   Preço de compra
+preco_venda         DECIMAL(10,2)   Preço de venda
+estoque_min         INT             Estoque mínimo para alerta
+unidade             VARCHAR(10)     Unidade de medida (un, kg, l, etc)
+fornecedor_id       INT             Chave estrangeira (fornecedores.id)
+data_cadastro       DATETIME        Data do cadastro
+status              TINYINT(1)      Ativo/inativo (1=ativo, 0=inativo)
+
+
+TABELA: movimentacoes (ENTRADA E SAÍDA)
+=========================================
+CAMPO               TIPO            DESCRIÇÃO
+------------------------------------------
+id                  INT             Chave primária, auto incremento
+produto_id          INT             Chave estrangeira (produtos.id)
+tipo                ENUM('E','S')   E = Entrada, S = Saída
+quantidade          INT             Quantidade movimentada
+valor_unitario      DECIMAL(10,2)   Valor unitário no momento
+motivo              VARCHAR(100)    Motivo da movimentação
+observacao          TEXT            Observações adicionais
+usuario             VARCHAR(50)     Usuário que realizou
+data_movimentacao   DATETIME        Data e hora da movimentação
+nota_fiscal         VARCHAR(50)     Número da nota fiscal 
+
+
+TABELA: fornecedores
+=========================================
+CAMPO               TIPO            DESCRIÇÃO
+------------------------------------------
+id                  INT             Chave primária, auto incremento
+nome                VARCHAR(100)    Nome do fornecedor
+cnpj                VARCHAR(14)     CNPJ do fornecedor (único)
+telefone            VARCHAR(20)     Telefone do fornecedor
+email               VARCHAR(100)    Email do fornecedor
+endereco            VARCHAR(200)    Endereço do fornecedor
+data_cadastro       DATETIME        Data do cadastro
+
+
+=========================================
+DIAGRAMA DE RELACIONAMENTO
+=========================================
+
+                 ┌──────────────────────────────┐
+                 │        FORNECEDORES          │
+                 ├──────────────────────────────┤
+                 │ id (PK)                     │
+                 │ nome                        │
+                 │ cnpj (UNIQUE)               │
+                 │ telefone                    │
+                 │ email                       │
+                 │ endereco                    │
+                 │ data_cadastro               │
+                 └──────────────┬──────────────┘
+                                │
+                                │ 1
+                                │
+                                │
+                                │ N
+                 ┌──────────────▼──────────────┐
+                 │          PRODUTOS           │
+                 ├──────────────────────────────┤
+                 │ id (PK)                     │
+                 │ nome                        │
+                 │ descricao                   │
+                 │ categoria                   │
+                 │ quantidade                  │
+                 │ preco_compra                │
+                 │ preco_venda                 │
+                 │ estoque_min                 │
+                 │ unidade                     │
+                 │ fornecedor_id (FK)          │
+                 │ data_cadastro               │
+                 │ status                      │
+                 └──────────────┬──────────────┘
+                                │
+                                │ 1
+                                │
+                                │
+                                │ N
+                 ┌──────────────▼──────────────┐
+                 │       MOVIMENTACOES         │
+                 ├──────────────────────────────┤
+                 │ id (PK)                     │
+                 │ produto_id (FK)             │
+                 │ tipo (E/S)                  │
+                 │ quantidade                  │
+                 │ valor_unitario              │
+                 │ motivo                      │
+                 │ observacao                  │
+                 │ usuario                     │
+                 │ data_movimentacao           │
+                 │ nota_fiscal                 │
+                 └──────────────────────────────┘
+
+=========================================

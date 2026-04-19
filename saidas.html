@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Controle de Estoque</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <div class="app-container">
+    <!-- Menu Lateral -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h3>Controle de Estoque</h3>
+        <p>Sistema de gestão</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li>
+          <a href="index.html"><span class="nav-icon">🏠</span> <span>Início</span></a>
+        </li>
+        <li>
+          <a href="entradas.html"><span class="nav-icon">📥</span> <span>Entradas</span></a>
+        </li>
+        <li>
+          <a href="saidas.html" class="active"><span class="nav-icon">📤</span> <span>Saídas</span></a>
+        </li>
+        <li>
+          <a href="produtos.html"><span class="nav-icon">📦</span> <span>Produtos</span></a>
+        </li>
+        <li>
+          <a href="fornecedores.html"><span class="nav-icon">🏢</span> <span>Fornecedores</span></a>
+        </li>
+        <li>
+          <a href="relatorios.html"><span class="nav-icon">📊</span> <span>Relatórios</span></a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Conteúdo Principal -->
+    <main class="main-content">
+      <div class="dashboard-container">
+        <div class="content-area">
+          <h1>Saídas de produtos</h1>
+          <form id="formSaida" class="form-group">
+            <h3>🔍 Localizar produto</h3>
+
+            <div
+              style="display: flex; flex-direction: row; gap: 10px; align-items: flex-end; width: 100%; grid-column: span 2;">
+              <div style="flex: 1; flex-direction: column; display: flex;">
+                <label for="saida_codigo_barras">Código de barras</label>
+                <input type="text" id="saida_codigo_barras" name="saida_codigo_barras"
+                  placeholder="Digite ou escaneie o código" style="margin: 0; width: 100%; box-sizing: border-box;" />
+              </div>
+              <button type="button" id="btnBuscarSaida"
+                style="margin: 0; padding: 0 1rem; height: 43px; width: auto; flex-shrink: 0; cursor: pointer; border-radius: 10px; border: none; background: var(--secondary-color, #3498db); color: white; display: flex; align-items: center; justify-content: center;">
+                🔍 Buscar
+              </button>
+            </div>
+
+            <!-- Produto encontrado (read-only) -->
+            <div>
+              <label for="saida_nome">Nome do produto</label>
+              <input type="text" id="saida_nome" name="saida_nome" readonly
+                style="background: #f5f5f5; cursor: not-allowed;" />
+            </div>
+            <div>
+              <label for="saida_categoria">Categoria</label>
+              <input type="text" id="saida_categoria" name="saida_categoria" readonly
+                style="background: #f5f5f5; cursor: not-allowed;" />
+            </div>
+
+            <div
+              style="grid-column: span 2; display: flex; align-items: center; gap: 15px; background: #f0f4f8; padding: 12px 16px; border-radius: 10px; border-left: 4px solid var(--secondary-color);">
+              <span id="saida_imagem_preview" style="font-size: 2.5rem;">📦</span>
+              <div>
+                <p style="margin:0; font-size: 0.8rem; color: var(--light-text);">Estoque disponível</p>
+                <p style="margin:0; font-size: 1.5rem; font-weight: bold; color: var(--primary-color);"
+                  id="saida_estoque_atual">—</p>
+              </div>
+              <input type="hidden" id="saida_produto_id" />
+              <input type="hidden" id="saida_preco_compra" />
+              <input type="hidden" id="saida_preco_venda" />
+            </div>
+
+            <h3>📊 Dados da saída</h3>
+
+            <div>
+              <label for="saida_quantidade">Quantidade</label>
+              <input type="number" id="saida_quantidade" name="saida_quantidade" min="1" placeholder="0" />
+            </div>
+            <div>
+              <label for="saida_motivo">Motivo</label>
+              <select id="saida_motivo" name="saida_motivo">
+                <option value="">Selecione</option>
+                <option value="Quebra e Avaria">Quebra e Avaria</option>
+                <option value="Devolução ao fornecedor">Devolução ao fornecedor</option>
+                <option value="Perda / Vencimento">Perda / Vencimento</option>
+                <option value="Transferência">Transferência</option>
+                <option value="Bonificação ou Doação">Bonificação ou Doação</option>
+                <option value="Uso interno">Uso interno</option>
+                <option value="Outro">Outro</option>
+              </select>
+            </div>
+
+            <div style="grid-column: span 2;">
+              <label for="saida_observacao">Observação (opcional)</label>
+              <input type="text" id="saida_observacao" name="saida_observacao"
+                placeholder="Ex: Pedido #123, cliente João..." />
+            </div>
+
+            <button type="submit">📤 Registrar saída</button>
+          </form>
+        </div>
+
+        <!-- Cards laterais -->
+        <aside class="summary-panel">
+          <div class="summary-card">
+            <span class="card-icon">📦</span>
+            <div class="card-info">
+              <h4>Produtos cadastrados</h4>
+              <p class="card-value" id="saida_card_produtos">0</p>
+            </div>
+          </div>
+          <div class="summary-card">
+            <span class="card-icon">📤</span>
+            <div class="card-info">
+              <h4>Saídas hoje</h4>
+              <p class="card-value" id="saida_card_saidas_hoje">0</p>
+            </div>
+          </div>
+          <div class="summary-card">
+            <span class="card-icon">💰</span>
+            <div class="card-info">
+              <h4>Valor saído hoje</h4>
+              <p class="card-value" id="saida_card_valor_hoje">R$ 0,00</p>
+            </div>
+          </div>
+          <div class="summary-card warning">
+            <span class="card-icon">⚠️</span>
+            <div class="card-info">
+              <h4>Estoque baixo</h4>
+              <p class="card-value" id="saida_card_estoque_baixo">0</p>
+            </div>
+          </div>
+          <div class="summary-card">
+            <span class="card-icon">📊</span>
+            <div class="card-info">
+              <h4>Total em estoque</h4>
+              <p class="card-value" id="saida_card_total_estoque">R$ 0,00</p>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <h2 class="titulo-lista">📋 Histórico de Saídas</h2>
+      <div id="lista-saidas"></div>
+
+      <footer>© 2026 - Controle de Estoque - Desenvolvido por Gabriela, Pedro, Matheus, Murilo e Hudson ©</footer>
+    </main>
+  </div>
+</body>
+<script src="script.js"></script>
+
+</html>

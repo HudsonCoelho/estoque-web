@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Controle de Estoque</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <main class="main-inicio">
+    <div class="content-area">
+      <div class="dashboard-header">
+        <h1>Painel de Controle</h1>
+        <div class="search-container">
+          <span class="search-icon">🔍</span>
+          <input type="text" placeholder="Buscar por produtos, pedidos ou fornecedores..." id="main-search">
+        </div>
+        <p>Acesso rápido aos módulos do sistema</p>
+      </div>
+
+      <div class="desktop-grid">
+        <a href="entradas.html" class="desk-card">
+          <div class="card-badge">Novo</div>
+          <div class="desk-icon">📥</div>
+          <div class="desk-info">
+            <h3>Entradas</h3>
+            <p>1 entrada hoje</p>
+            <span class="status">Registrar nota fiscal</span>
+          </div>
+        </a>
+
+        <a href="saidas.html" class="desk-card">
+          <div class="desk-icon">📤</div>
+          <div class="desk-info">
+            <h3>Saídas</h3>
+            <p>R$ 0,00 hoje</p>
+            <span class="status">Baixa de estoque</span>
+          </div>
+        </a>
+
+        <a href="produtos.html" class="desk-card alert">
+          <div class="card-badge">3 Críticos</div>
+          <div class="desk-icon">📦</div>
+          <div class="desk-info">
+            <h3>Produtos</h3>
+            <p>14 Cadastrados</p>
+            <span class="status">Verificar estoque baixo</span>
+          </div>
+        </a>
+
+        <a href="fornecedores.html" class="desk-card">
+          <div class="desk-icon">🏢</div>
+          <div class="desk-info">
+            <h3>Fornecedores</h3>
+            <p>18 Parceiros</p>
+            <span class="status">Gerenciar contatos</span>
+          </div>
+        </a>
+
+        <a href="relatorios.html" class="desk-card">
+          <div class="desk-icon">📊</div>
+          <div class="desk-info">
+            <h3>Relatórios</h3>
+            <p>Lucro: R$ 0,00</p>
+            <span class="status">Gerar PDF/Excel</span>
+          </div>
+        </a>
+      </div>
+    </div>
+    <footer class="tela-inicio">© 2026 - Controle de Estoque - Desenvolvido por Gabriela, Pedro, Matheus, Murilo e Hudson ©</footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+
+</html>

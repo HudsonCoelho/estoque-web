@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Estoque</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Menu Lateral -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>Controle de Estoque</h3>
+                <p>Sistema de gestão</p>
+            </div>
+            <ul class="sidebar-nav">
+                <li><a href="index.html"><span class="nav-icon">🏠</span> <span>Início</span></a></li>
+                <li><a href="entradas.html"><span class="nav-icon">📥</span> <span>Entradas</span></a></li>
+                <li><a href="saidas.html"><span class="nav-icon">📤</span> <span>Saídas</span></a></li>
+                <li><a href="produtos.html" class="active"><span class="nav-icon">📦</span> <span>Produtos</span></a>
+                </li>
+                <li><a href="fornecedores.html"><span class="nav-icon">🏢</span> <span>Fornecedores</span></a></li>
+                <li><a href="relatorios.html"><span class="nav-icon">📊</span> <span>Relatórios</span></a></li>
+
+        </aside>
+        <main class="main-content">
+            <div class="busca-produtos">
+                <input type="text" id="inputBusca" placeholder="Buscar por código de barras ou nome do produto">
+
+            </div>
+
+            <div class="card-produtos">
+
+            </div>
+    </div>
+    <footer>
+        © 2026 - Controle de Estoque - Desenvolvido por Gabriela, Pedro, Matheus, Murilo e Hudson ©
+    </footer>
+    </main>
+    </div>
+
+    <!-- Modal de Edição -->
+    <div id="modalEdicao" class="modal-edicao">
+        <div class="modal-conteudo">
+            <div class="modal-header">
+                <h2>Editar Produto</h2>
+                <button class="modal-fechar" onclick="fecharModal()">&times;</button>
+            </div>
+            <form id="formEdicao" style="display: flex; flex-direction: column; gap: 15px;">
+                <div>
+                    <label for="modal-nome"><strong>Nome do Produto:</strong></label>
+                    <input type="text" id="modal-nome" required
+                        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+                </div>
+
+                <div>
+                    <label for="modal-categoria"><strong>Categoria:</strong></label>
+                    <input type="text" id="modal-categoria" placeholder="Ex: Mercearia, Bebidas, Congelados..."
+                        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div>
+                        <label for="modal-estoque-min"><strong>Estoque Mínimo:</strong></label>
+                        <input type="number" id="modal-estoque-min" min="0" required
+                            style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+                    </div>
+                    <div>
+                        <label for="modal-quantidade"><strong>Quantidade Atual:</strong></label>
+                        <input type="number" id="modal-quantidade" min="0" required
+                            style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+                    </div>
+                </div>
+
+                <div>
+                    <label for="modal-preco"><strong>Preço de Venda (R$):</strong></label>
+                    <input type="number" id="modal-preco" min="0" step="0.01" required
+                        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+                </div>
+
+                <div>
+                    <label for="modal-imagem"><strong>URL da Imagem:</strong></label>
+                    <input type="text" id="modal-imagem" placeholder="https://exemplo.com/imagem.jpg"
+                        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+                    <div id="previewImagem" style="margin-top: 10px; text-align: center; display: none;">
+                        <p style="font-size: 0.85rem; color: #7f8c8d;">Preview:</p>
+                        <img id="imagemPreview" src=""
+                            style="max-height: 150px; max-width: 150px; border-radius: 8px; margin-top: 5px;">
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 10px; margin-top: 15px;">
+                    <button type="submit" class="btn-salvar-modal">✅ Salvar Alterações</button>
+                    <button type="button" class="btn-cancelar-modal" onclick="fecharModal()">❌ Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+<script src="script.js"></script>
+
+</html>

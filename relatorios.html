@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Relatórios</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <!-- PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+
+    <!-- Gráfico -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="app-container">
+
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>Controle de Estoque</h3>
+                <p>Sistema de gestão</p>
+            </div>
+            <ul class="sidebar-nav">
+                <li><a href="index.html"><span class="nav-icon">🏠</span> <span>Início</span></a></li>
+                <li><a href="entradas.html"><span class="nav-icon">📥</span> <span>Entradas</span></a></li>
+                <li><a href="saidas.html"><span class="nav-icon">📤</span> <span>Saídas</span></a></li>
+                <li><a href="produtos.html"><span class="nav-icon">📦</span> <span>Produtos</span></a></li>
+                <li><a href="fornecedores.html"><span class="nav-icon">🏢</span> <span>Fornecedores</span></a></li>
+                <li><a href="relatorios.html" class="active"><span class="nav-icon">📊</span>
+                        <span>Relatórios</span></a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="dashboard-container">
+                <div class="content-relatorio">
+                    <h1>Gerar Relatórios</h1>
+                    <div class="filtros-relatorio">
+                        <input type="date" id="data_inicio">
+                        <input type="date" id="data_fim">
+
+                        <select id="tipo">
+                            <option value="">Todos</option>
+                            <option value="entrada">Entrada</option>
+                            <option value="saida">Saída</option>
+                            <option value="inventario">Inventário</option>
+                        </select>
+
+                        <button onclick="gerarRelatorio()">Gerar</button>
+                        <button onclick="relatorioEstoque()">Estoque</button>
+                        <button onclick="exportarExcel()">📥 Excel</button>
+                        <button onclick="exportarPDF()">📄 PDF</button>
+                    </div>
+
+                    <div class="cards">
+                        <div class="card">💰 Receita <span id="total">R$ 0,00</span></div>
+                        <div class="card">📦 Quantidade <span id="qtd">0</span></div>
+                        <div class="card">💸 Custo <span id="custo">R$ 0,00</span></div>
+                        <div class="card">📊 Lucro <span id="lucro">R$ 0,00</span></div>
+                    </div>
+
+                    <table class="tabela-relatorio">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Produto</th>
+                                <th>Tipo</th>
+                                <th>Quantidade</th>
+                                <th>Valor Unitário</th>
+                                <th>Valor Total</th>
+                                <th>Custo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabela"></tbody>
+                    </table>
+
+                    <canvas id="graficoRelatorio" height="100"></canvas>
+                </div>
+            </div>
+            <footer>© 2026 - Controle de Estoque - Desenvolvido por Gabriela, Pedro, Matheus, Murilo e Hudson ©</footer>
+        </main>
+    </div>
+
+    <script src="script_relatorio.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Controle de Estoque</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <div class="app-container">
+    <!-- Menu Lateral -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h3>Controle de Estoque</h3>
+        <p>Sistema de gestão</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li>
+          <a href="index.html"><span class="nav-icon">🏠</span> <span>Início</span></a>
+        </li>
+        <li>
+          <a href="entradas.html" class="active"><span class="nav-icon">📥</span> <span>Entradas</span></a>
+        </li>
+        <li>
+          <a href="saidas.html"><span class="nav-icon">📤</span> <span>Saídas</span></a>
+        </li>
+        <li>
+          <a href="produtos.html"><span class="nav-icon">📦</span> <span>Produtos</span></a>
+        </li>
+        <li>
+          <a href="fornecedores.html"><span class="nav-icon">🏢</span> <span>Fornecedores</span></a>
+        </li>
+        <li>
+          <a href="relatorios.html"><span class="nav-icon">📊</span> <span>Relatórios</span></a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Conteúdo Principal -->
+    <main class="main-content">
+      <div class="dashboard-container">
+        <div class="content-area">
+          <h1>Entradas de produtos</h1>
+          <form class="form-group">
+            <h3>📦 Dados do produto</h3>
+            <div>
+              <label for="nota_fiscal">Nota Fiscal (Opcional)</label>
+              <input type="text" id="nota_fiscal" name="nota_fiscal" placeholder="Nº da NF" />
+            </div>
+
+            <input type="hidden" id="url_imagem" name="url_imagem">
+            <div style="display: flex; flex-direction: row; gap: 10px; align-items: flex-end; width: 100%;">
+              <div style="flex: 1; flex-direction: column; display: flex;">
+                <label for="codigo_barras">Código de barras</label>
+                <input type="text" id="codigo_barras" name="codigo_barras"
+                  style="margin: 0; width: 100%; box-sizing: border-box;" />
+              </div>
+              <button type="button" id="btnConsultarAPI"
+                style="margin: 0; padding: 0 1rem; height: 43px; width: auto; flex-shrink: 0; cursor: pointer; border-radius: 10px; border: none; background: var(--secondary-color, #3498db); color: white; display: flex; align-items: center; justify-content: center;">
+                🔍 Consultar
+              </button>
+            </div>
+
+            <div>
+              <label for="nome">Nome do produto</label>
+              <input type="text" id="nome" name="nome" />
+            </div>
+            <div>
+              <label for="categoria">Categoria</label>
+              <select name="categoria" id="categoria">
+                <option value="">Selecione</option>
+                <option>Mercearia</option>
+                <option>Bebidas</option>
+                <option>Biscoitos e Snacks</option>
+                <option>Congelados</option>
+                <option>Laticínios</option>
+                <option>Açougue e Frios</option>
+                <option>Limpeza</option>
+                <option>Hortfruti</option>
+                <option>Higiene Pessoal</option>
+                <option>Pet Shop</option>
+                <option>Padaria</option>
+                <option>Outros</option>
+              </select>
+            </div>
+            <div>
+              <label for="descricao">Descrição</label>
+              <input type="text" id="descricao" name="descricao" />
+            </div>
+            <div>
+              <label for="url_imagem_input">URL da Imagem (Opcional)</label>
+              <input type="text" id="url_imagem_input" name="url_imagem_input"
+                placeholder="Cole a URL da imagem do produto" />
+            </div>
+            <div class="autocomplete-wrapper" style="position: relative;">
+              <label for="fornecedor_nome">Fornecedor</label>
+              <input type="text" id="fornecedor_nome" placeholder="Pesquisar fornecedor..." autocomplete="off">
+              <div id="lista_fornecedores_custom" class="autocomplete-items"></div>
+            </div>
+
+
+
+            <div>
+              <label for="unidade">Unidade</label>
+              <select name="unidade" id="unidade">
+                <option value="">Selecione</option>
+                <option value="UN">UN - Unidade</option>
+                <option value="KG">KG - Kilograma</option>
+                <option value="LT">LT - Litro</option>
+                <option value="CX">CX - Caixa</option>
+                <option value="PCT">PCT - Pacote</option>
+                <option value="DZ">DZ - Dúzia</option>
+                <option value="BDJ">BDJ - Bandeja</option>
+                <option value="OUTROS">OUTROS</option>
+              </select>
+            </div>
+            <h3>📊 Estoque</h3>
+            <div>
+              <label for="quantidade">Quantidade</label>
+              <input type="number" id="quantidade" name="quantidade" />
+            </div>
+            <div>
+              <label for="estoque_min">Estoque mínimo</label>
+              <input type="number" id="estoque_min" name="estoque_min" />
+            </div>
+            <h3>💰 Preços</h3>
+            <div>
+              <label for="preco_compra">Preço de compra</label>
+              <input type="number" id="preco_compra" name="preco_compra" step="0.01" min="0" />
+            </div>
+            <div>
+              <label for="preco_venda">Preço de venda</label>
+              <input type="number" id="preco_venda" name="preco_venda" step="0.01" min="0" />
+            </div>
+            <button type="submit">Salvar</button>
+          </form>
+        </div>
+
+        <aside class="summary-panel">
+          <div class="summary-card">
+            <span class="card-icon">📦</span>
+            <div class="card-info">
+              <h4>Produtos cadastrados</h4>
+              <p class="card-value" id="produtos">0</p>
+            </div>
+          </div>
+          <div class="summary-card">
+            <span class="card-icon">📥</span>
+            <div class="card-info">
+              <h4>Entradas hoje</h4>
+              <p class="card-value" id="entradas">0</p>
+            </div>
+          </div>
+          <div class="summary-card">
+            <span class="card-icon">📤</span>
+            <div class="card-info">
+              <h4>Novos produtos</h4>
+              <p class="card-value" id="novos">0</p>
+            </div>
+          </div>
+          <div class="summary-card warning">
+            <span class="card-icon">⚠️</span>
+            <div class="card-info">
+              <h4>Estoque baixo</h4>
+              <p class="card-value" id="estoque">0</p>
+            </div>
+          </div>
+          <div class="summary-card">
+            <span class="card-icon">💰</span>
+            <div class="card-info">
+              <h4>Total de Valor em Estoque</h4>
+              <p class="card-value" id="total-vendas">R$ 0</p>
+            </div>
+          </div>
+        </aside>
+      </div>
+      <h2 class="titulo-lista">📋 Histórico de Produtos</h2>
+      <div id="lista-produtos"></div>
+
+      <footer>© 2026 - Controle de Estoque - Desenvolvido por Gabriela, Pedro, Matheus, Murilo e Hudson ©</footer>
+    </main>
+  </div>
+
+</body>
+<script src="script.js"></script>
+
+</html>
