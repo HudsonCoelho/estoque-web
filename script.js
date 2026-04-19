@@ -2,9 +2,9 @@
 // CONFIGURAÇÃO DA API
 // ===============================
 // URL da API - Pode ser alterada via variável de ambiente
-const API_URL = window.location.hostname === 'localhost' 
+const API_URL = window.location.hostname === 'localhost'
     ? 'http://localhost:3000'
-    : (window.API_URL || 'http://3.92.23.232:3000');
+    : 'http://3.92.23.232:3000';
 
 console.log(`🔗 API URL: ${API_URL}`);
 
@@ -62,7 +62,7 @@ if (form && document.getElementById("codigo_barras")) {
 
         try {
             //  Verificar duplicado
-            const check = await fetch(`http://3.92.23.232:3000/produtos/${codigo}`);
+            const check = await fetch(`${API_URL}/produtos/${codigo}`);
 
             if (check.ok) {
                 alert("⚠️ Produto já cadastrado!");
@@ -70,7 +70,7 @@ if (form && document.getElementById("codigo_barras")) {
             }
 
             //  Salvar no banco
-            await fetch("http://3.92.23.232:3000/produtos", {
+            await fetch(`${API_URL}/produtos`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -98,7 +98,7 @@ if (form && document.getElementById("codigo_barras")) {
 // ===============================
 async function listarProdutos() {
     try {
-        const response = await fetch("http://3.92.23.232:3000/produtos");
+        const response = await fetch(`${API_URL}/produtos`);
         let produtos = await response.json();
 
         const lista = document.getElementById("lista-produtos");
@@ -149,7 +149,7 @@ async function remover(id) {
     if (!confirm("Deseja excluir?")) return;
 
     try {
-        await fetch(`http://3.92.23.232:3000/produtos/${id}`, {
+        await fetch(`${API_URL}/produtos/${id}`, {
             method: "DELETE"
         });
 
@@ -183,7 +183,7 @@ async function atualizarCards() {
         !elSaidaProdutos && !elSaidaSaidasHoje && !elSaidaValorHoje && !elSaidaEstoqueBaixo && !elSaidaTotalEstoque) return;
 
     try {
-        const response = await fetch("http://3.92.23.232:3000/produtos");
+        const response = await fetch(`${API_URL}/produtos`);
         const produtos = await response.json();
 
         let total = produtos.length;
@@ -219,7 +219,7 @@ async function atualizarCards() {
         // Saídas Hoje 
         if (elSaidaSaidasHoje || elSaidaValorHoje) {
             try {
-                const resSaidas = await fetch("http://3.92.23.232:3000/saidas");
+                const resSaidas = await fetch(`${API_URL}/saidas`);
                 if (resSaidas.ok) {
                     const logSaidas = await resSaidas.json();
                     let qtdSaidas = 0;
@@ -263,7 +263,7 @@ if (btnConsultarAPI) {
         btnConsultarAPI.innerText = "⏳...";
 
         try {
-            const response = await fetch(`http://3.92.23.232:3000/consultar/${gtin}`);
+            const response = await fetch(`${API_URL}/consultar/${gtin}`);
 
             if (!response.ok) throw new Error();
 
@@ -322,7 +322,7 @@ async function carregarFornecedores() {
     let isSelecting = false;
 
     try {
-        const response = await fetch("http://3.92.23.232:3000/fornecedores");
+        const response = await fetch(`${API_URL}/fornecedores`);
         if (!response.ok) throw new Error("Erro na API");
         const fornecedores = await response.json();
 
@@ -451,7 +451,7 @@ atualizarCards();
 // BUSCA AUTOMÁTICA
 // ===============================
 
-const API_URL = "http://3.92.23.232:3000";
+// API_URL já declarado no topo do arquivo
 
 let listaProdutosStorage = [];
 
