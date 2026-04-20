@@ -825,7 +825,7 @@ if (formFornecedor) {
         };
 
         try {
-            const response = await fetch("http://3.92.23.232:3000/fornecedores", {
+            const response = await fetch(`${API_URL}/fornecedores`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(fornecedor)
@@ -858,7 +858,7 @@ async function listarFornecedores() {
     if (!lista) return;
 
     try {
-        const response = await fetch("http://3.92.23.232:3000/fornecedores");
+        const response = await fetch(`${API_URL}/fornecedores`);
         const fornecedores = await response.json();
 
         todosFornecedores = fornecedores.reverse();
@@ -958,7 +958,7 @@ if (formEdicaoFornecedor) {
         };
 
         try {
-            const res = await fetch(`http://3.92.23.232:3000/fornecedores/${id}`, {
+            const res = await fetch(`${API_URL}/fornecedores/${id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(atualizado)
@@ -985,7 +985,7 @@ async function removerFornecedor(id) {
     if (!confirm("Deseja excluir este fornecedor?")) return;
 
     try {
-        const response = await fetch("http://3.92.23.232:3000/fornecedores/" + id, {
+        const response = await fetch(`${API_URL}/fornecedores/` + id, {
             method: "DELETE"
         });
 
@@ -1019,7 +1019,7 @@ if (btnBuscarSaida) {
 
         btnBuscarSaida.innerText = "⏳...";
         try {
-            const res = await fetch("http://3.92.23.232:3000/produtos");
+            const res = await fetch(`${API_URL}/produtos`);
             const produtos = await res.json();
             const produto = produtos.find(p => p.codigo_barras === codigo || p.id == codigo);
 
@@ -1075,7 +1075,7 @@ if (formSaida) {
         };
 
         try {
-            const res = await fetch(`http://3.92.23.232:3000/saidas`, {
+            const res = await fetch(`${API_URL}/saidas`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(atualizado_payload)
@@ -1104,7 +1104,7 @@ async function listarSaidasHistorico() {
     if (!lista) return;
 
     try {
-        const response = await fetch("http://3.92.23.232:3000/saidas");
+        const response = await fetch(`${API_URL}/saidas`);
         let logSaidas = await response.json();
 
         lista.innerHTML = "";
@@ -1138,30 +1138,4 @@ async function listarSaidasHistorico() {
 if (document.getElementById("lista-saidas")) {
     listarSaidasHistorico();
 }
-// ========================
-// LISTAR MOVIMENTAÇÕES
-// ========================
-app.get("/movimentacoes", (req, res) => {
-    const sql = `
-        SELECT 
-            m.id,
-            m.tipo,
-            m.quantidade,
-            m.valor_unitario,
-            m.data_movimentacao AS data,
-            m.nota_fiscal,
-            p.nome AS produto_nome,
-            p.preco_compra AS custo
-        FROM movimentacoes m
-        JOIN produtos p ON p.id = m.produto_id
-        ORDER BY m.data_movimentacao DESC
-    `;
-
-    db.query(sql, (err, results) => {
-        if (err) {
-            console.error("Erro ao buscar movimentações:", err);
-            return res.status(500).json({ erro: "Erro ao buscar movimentações" });
-        }
-        res.json(results);
-    });
-});
+// Fim do script frontend
