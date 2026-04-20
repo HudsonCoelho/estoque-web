@@ -4,6 +4,7 @@ produtos
 entradas
 saidas
 fornecedores
+relatorios
 comunicação api
 
 TABELA: produtos
@@ -35,6 +36,7 @@ produto_id          INT             Chave estrangeira (produtos.id)
 tipo                ENUM('E','S')   E = Entrada, S = Saída
 quantidade          INT             Quantidade movimentada
 valor_unitario      DECIMAL(10,2)   Valor unitário no momento
+custo               DECIMAL(10,2)   Custo do produto armazenado
 motivo              VARCHAR(100)    Motivo da movimentação
 observacao          TEXT            Observações adicionais
 usuario             VARCHAR(50)     Usuário que realizou
@@ -104,6 +106,7 @@ DIAGRAMA DE RELACIONAMENTO
                  │ tipo (E/S)                  │
                  │ quantidade                  │
                  │ valor_unitario              │
+                 │ custo                       │
                  │ motivo                      │
                  │ observacao                  │
                  │ usuario                     │

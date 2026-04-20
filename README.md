@@ -1,21 +1,43 @@
 # 📦 Sistema de Controle de Estoque
 
-Um sistema completo de gestão de estoque com frontend moderno (HTML/CSS/JavaScript) e backend robusto (Node.js + MySQL).
+Um sistema completo de gestão de estoque online e responsivo com frontend moderno (HTML/CSS/JavaScript) e API backend robusta (Node.js + Express + MySQL).
 
-## 🚀 Início Rápido
+---
+
+## 🌐 Acesso Online
+
+O projeto já está **em produção** e pode ser acessado através dos links abaixo:
+
+- 💻 **Aplicação Web (Frontend):** [Acessar a Aplicação](https://hudsoncoelho.github.io/estoque-web/)
+  - Hospedado no **GitHub Pages**.
+- ⚙️ **API Backend:** `https://controle-estoque-web.duckdns.org`
+  - Hospedado na **AWS EC2**, com proxy reverso Nginx configurado com SSL (HTTPS via Let's Encrypt).
+
+---
+
+## 🚀 Funcionalidades
+
+- **Gestão de Produtos:** Cadastro, edição e deleção de itens do estoque.
+- **Entradas e Saídas:** Controle de adição e retirada de produtos, com formato de preço exato, mantendo o histórico de movimentações no sistema.
+- **Fornecedores:** Gestão completa de fornecedores com interface de busca via autocomplete e janelas modais de edição.
+- **Relatórios:** Dashboard intuitivo para análise em tempo real do histórico de transações, totalizadores, fechamento e filtro de extrato.
+- **Sincronização em Tempo Real:** Conexão direta com banco MySQL centralizado em nuvem via requisições assíncronas do frontend.
+
+---
+
+## 💻 Instalação Local (Desenvolvimento)
 
 ### Pré-requisitos
-- Node.js 14+
-- MySQL 5.7+
+- Node.js 14+ ou superior
+- MySQL 5.7+ ou superior
 - Git
-- Uma conta no GitHub
 
-### Instalação Local
+### Passo a passo
 
 1. **Clone o repositório:**
 ```bash
-git clone https://github.com/seu-usuario/seu-repositorio.git
-cd seu-repositorio
+git clone https://github.com/HudsonCoelho/estoque-web.git
+cd estoque-web
 ```
 
 2. **Instale as dependências do backend:**
@@ -24,268 +46,83 @@ npm install
 ```
 
 3. **Configure as variáveis de ambiente:**
+Copie o modelo para um novo arquivo `.env` e ajuste as credenciais:
 ```bash
 cp .env.example .env
 ```
-
-Edite o arquivo `.env` com suas credenciais do banco de dados:
+_Parâmetros do `.env`:_
 ```env
 DB_HOST=localhost
 DB_USER=root
-DB_PASSWORD=sua_senha
+DB_PASSWORD=sua_senha_local
 DB_NAME=estoque
 PORT=3000
-NODE_ENV=development
+ALLOWED_ORIGINS=*
 ```
 
 4. **Crie o banco de dados:**
+Execute e crie o banco relacional de desenvolvimento:
 ```bash
-# Execute o script SQL para criar as tabelas
-mysql -u root -p estoque < database.sql
+mysql -u root -p < database.sql
 ```
 
-5. **Inicie o servidor:**
+5. **Inicie o servidor (API):**
 ```bash
 npm start
 ```
-
-O servidor estará disponível em `http://localhost:3000`
-
----
-
-## 🌐 Deploy no GitHub Pages + EC2
-
-### Passo 1: Preparar o Frontend para GitHub Pages
-
-1. **Crie um repositório no GitHub:**
-   - Vá para [github.com/new](https://github.com/new)
-   - Nome: `seu-usuario.github.io` (substitua seu-usuario)
-   - Deixe público
-
-2. **Configure o repositório localmente:**
-```bash
-git init
-git add .
-git commit -m "Initial commit: Sistema de Controle de Estoque"
-git branch -M main
-git remote add origin https://github.com/seu-usuario/seu-usuario.github.io.git
-git push -u origin main
-```
-
-3. **Ative GitHub Pages:**
-   - Vá para Settings > Pages
-   - Selecione "Deploy from a branch"
-   - Branch: `main`, pasta: `/ (root)`
-   - Clique em Save
-
-✅ Seu frontend estará disponível em: `https://seu-usuario.github.io`
+_O servidor estará disponível na máquina em `http://localhost:3000`._
 
 ---
 
-### Passo 2: Configurar o Backend na EC2
+## ☁️ Arquitetura de Deploy 
 
-1. **Conecte via SSH:**
-```bash
-ssh -i sua-chave.pem ec2-user@3.92.23.232
-```
+### Frontend
+- As páginas (`.html`), estilos (`.css`) e scripts (`.js`) são diretamente distribuídas e hospedadas via **GitHub Pages** (Branch `main`).
 
-2. **Instale Node.js e dependências:**
-```bash
-curl -sL https://rpm.nodesource.com/setup_16.x | sudo bash -
-sudo yum install -y nodejs
-sudo yum install -y mysql
-```
-
-3. **Clone o repositório:**
-```bash
-git clone https://github.com/seu-usuario/seu-repositorio.git
-cd seu-repositorio
-npm install
-```
-
-4. **Configure o `.env` na EC2:**
-```bash
-nano .env
-```
-
-```env
-DB_HOST=seu-rds-endpoint.amazonaws.com
-DB_USER=admin
-DB_PASSWORD=sua_senha_segura
-DB_NAME=estoque
-PORT=3000
-NODE_ENV=production
-ALLOWED_ORIGINS=https://seu-usuario.github.io
-```
-
-5. **Inicie o servidor com PM2 (recomendado):**
-```bash
-sudo npm install -g pm2
-pm2 start server.js --name "estoque-api"
-pm2 startup
-pm2 save
-```
+### Backend
+1. Está contido em uma instância Linux EC2 pela **Amazon Web Services**.
+2. A aplicação Express corre de forma background gerenciada pelo utilitário **PM2**.
+3. Assinatura do domínio gratuíta `controle-estoque-web.duckdns.org` direciona IP dinâmico/estático da instância.
+4. O servidor utiliza o **Nginx** como Web Server e Proxy Reverso, bloqueando tráfego não-seguro (HTTP) nas portas do Node, recebendo via HTTPS (porta 443 via Let's Encrypt Certbot) e repassando em loopback para a API na porta `3000`.
 
 ---
 
-### Passo 3: Configurar HTTPS na EC2
+## 📝 Estrutura de Arquivos
 
-Se estiver usando um domínio customizado:
-
-```bash
-sudo yum install certbot python-certbot-nginx
-sudo certbot certonly --standalone -d seu-dominio.com
+```text
+├── index.html              # Página inicial
+├── produtos.html           # Gestão de produtos
+├── entradas.html           # Registro de entradas no estoque
+├── saidas.html             # Registro de saídas do estoque
+├── fornecedores.html       # Gestão de dados dos fornecedores
+├── relatorios.html         # Central com históricos de transações 
+├── styles.css              # Diretrizes de estilo globais (UI/UX)
+├── script.js               # Comportamentos JS na maioria das visualizações
+├── script_relatorio.js     # Domínio computacional isolado na renderização de relatórios
+├── server.js               # Código fonte da API e CRUD centralizado (Node/Express)
+├── package.json            # Dependências geridas pelo npm
+├── .env.example            # Layout do arquivo de configuração local das Envs
+└── .gitignore              # Lista de pastas bloqueadas do GitHub commit
 ```
-
-Ou use um certificado auto-assinado para testes.
-
----
-
-### Passo 4: Configurar Firewall (Security Group)
-
-Na AWS EC2:
-1. Vá para Security Groups
-2. Adicione regra de entrada:
-   - Type: Custom TCP
-   - Port: 3000
-   - Source: `0.0.0.0/0` (ou restrinja ao seu IP)
-
----
-
-### Passo 5: Atualizar URL da API no Frontend
-
-Antes de fazer push do código, edite o `index.html` e adicione uma configuração global:
-
-```html
-<script>
-  // Configure a URL da API antes de qualquer outro script
-  window.API_URL = 'https://3.92.23.232:3000'; // ou seu domínio
-</script>
-```
-
-Ou no início de `script.js` e `script_relatorio.js`, já está configurado para ler `window.API_URL`.
 
 ---
 
 ## 🔒 Segurança
 
-### ⚠️ IMPORTANTE:
-- **Nunca comita** o arquivo `.env` com credenciais reais
-- Use variáveis de ambiente na EC2
-- Configure CORS apenas para seus domínios
-- Use HTTPS em produção
-- Mantenha MySQL seguro com senhas fortes
-
-### Checklist de Segurança:
-- [ ] `.env` está no `.gitignore`
-- [ ] CORS configurado apenas para seu domínio
-- [ ] Banco de dados em RDS (não localhost)
-- [ ] Senhas criptografadas nas variáveis de ambiente
-- [ ] HTTPS habilitado
-- [ ] Firewall restricto
+- Nenhum arquivo `.env` com senhas em aberto foi salvo no commit graças ao `.gitignore`.
+- Conexões protegidas via CORS para bloquear tráfego de domínios maliciosos.
+- Sem *Mixed Content*: Com a comunicação via HTTPS pela porta 443 do backend proxy server o navegador entende a requisição como criptografada.
 
 ---
 
-## 🛠️ Variáveis de Ambiente
+## 📞 Suporte e Contato
 
-Veja `.env.example` para todas as opções disponíveis:
-
-```env
-# Banco de Dados
-DB_HOST=localhost
-DB_USER=root
-DB_PASSWORD=1234
-DB_NAME=estoque
-
-# Servidor
-PORT=3000
-NODE_ENV=development
-
-# API (Frontend)
-REACT_APP_API_URL=http://localhost:3000
-```
+Para reportar problemas ou sugerir novas features em nossa integração, por favor abram publicamente uma issue no GitHub.
 
 ---
 
-## 📝 Estrutura do Projeto
+## 👨‍💻 Autores
 
-```
-├── index.html              # Página inicial
-├── produtos.html           # Gestão de produtos
-├── entradas.html           # Registro de entradas
-├── saidas.html             # Registro de saídas
-├── fornecedores.html       # Gestão de fornecedores
-├── relatorios.html         # Relatórios
-├── styles.css              # Estilos globais
-├── script.js               # Lógica principal
-├── script_relatorio.js     # Lógica de relatórios
-├── server.js               # API Express
-├── package.json            # Dependências
-├── .env.example            # Exemplo de configuração
-└── .gitignore              # Arquivos ignorados no Git
-```
+Desenvolvido por **Gabriela**, **Pedro**, **Matheus**, **Murilo** e **Hudson**.
 
----
-
-## 🚀 Comandos Úteis
-
-```bash
-# Desenvolvimento
-npm start
-
-# Com auto-reload (instale nodemon antes)
-npm run dev
-
-# Produção na EC2
-pm2 start server.js
-pm2 status
-pm2 stop estoque-api
-pm2 restart estoque-api
-```
-
----
-
-## ❓ Troubleshooting
-
-### "Erro ao conectar ao banco de dados"
-- Verifique se o MySQL está rodando
-- Confirme as credenciais no `.env`
-- Teste a conexão: `mysql -h localhost -u root -p`
-
-### "CORS error no frontend"
-- Configure `ALLOWED_ORIGINS` no `.env`
-- Reinicie o servidor: `pm2 restart estoque-api`
-
-### "Porta 3000 já em uso"
-```bash
-# Liberar a porta
-sudo fuser -k 3000/tcp
-# Ou usar outra porta no .env
-```
-
-### "GitHub Pages mostra 404"
-- Verifique se o repositório é público
-- Espere alguns minutos para o Pages atualizar
-- Limpe o cache do navegador
-
----
-
-## 📞 Suporte
-
-Para reportar problemas, abra uma issue no GitHub.
-
----
-
-## 📄 Licença
-
-Este projeto é licenciado sob ISC.
-
----
-
-## 👨‍💻 Autor
-
-Desenvolvido com ❤️ por Mateus Oliveira
-
----
-
-**Última atualização:** Abril de 2026
+**Data da Última Atualização:** Abril de 2026
