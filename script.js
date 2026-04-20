@@ -4,7 +4,7 @@
 // URL da API - Pode ser alterada via variável de ambiente
 const API_URL = window.location.hostname === 'localhost'
     ? 'http://localhost:3000'
-    : 'http://3.92.23.232:3000';
+    : 'https://controle-estoque-web.duckdns.org';
 
 console.log(`🔗 API URL: ${API_URL}`);
 
