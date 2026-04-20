@@ -171,6 +171,8 @@ async function atualizarCards() {
     const elNovos = document.getElementById("novos");
     const elEstoque = document.getElementById("estoque");
     const elTotalVendas = document.getElementById("total-vendas");
+    const elProdutosCriticos = document.getElementById("produtos-criticos");
+    const elTotalFornecedores = document.getElementById("total-fornecedores");
 
     const elSaidaProdutos = document.getElementById("saida_card_produtos");
     const elSaidaSaidasHoje = document.getElementById("saida_card_saidas_hoje");
@@ -180,6 +182,7 @@ async function atualizarCards() {
 
     // Se nenhum card existir na página, não faz nada
     if (!elProdutos && !elEntradas && !elNovos && !elEstoque && !elTotalVendas &&
+        !elProdutosCriticos && !elTotalFornecedores &&
         !elSaidaProdutos && !elSaidaSaidasHoje && !elSaidaValorHoje && !elSaidaEstoqueBaixo && !elSaidaTotalEstoque) return;
 
     try {
@@ -210,33 +213,45 @@ async function atualizarCards() {
         if (elEntradas) elEntradas.innerText = entradasHoje;
         if (elNovos) elNovos.innerText = entradasHoje;
         if (elEstoque) elEstoque.innerText = estoqueBaixo + " itens";
-        if (elTotalVendas) elTotalVendas.innerText = "R$ " + totalVendas.toFixed(2);
+        if (elProdutosCriticos) elProdutosCriticos.innerText = estoqueBaixo;
+        if (elTotalVendas) elTotalVendas.innerText = "R$ " + totalVendas.toFixed(2).replace('.', ',');
 
         if (elSaidaProdutos) elSaidaProdutos.innerText = total;
         if (elSaidaEstoqueBaixo) elSaidaEstoqueBaixo.innerText = estoqueBaixo + " itens";
         if (elSaidaTotalEstoque) elSaidaTotalEstoque.innerText = "R$ " + totalVendas.toFixed(2);
 
-        // Saídas Hoje 
-        if (elSaidaSaidasHoje || elSaidaValorHoje) {
+        // Saídas Hoje
+        try {
+            const resSaidas = await fetch(`${API_URL}/saidas`);
+            if (resSaidas.ok) {
+                const logSaidas = await resSaidas.json();
+                let qtdSaidas = 0;
+                let valorSaidas = 0;
+                logSaidas.forEach(req => {
+                    const dataS = new Date(req.data);
+                    dataS.setHours(0, 0, 0, 0);
+                    if (dataS.getTime() === hojeObj.getTime()) {
+                        qtdSaidas += req.quantidade || 0;
+                        valorSaidas += Number(req.valor_total) || 0;
+                    }
+                });
+                if (elSaidaSaidasHoje) elSaidaSaidasHoje.innerText = qtdSaidas;
+                if (elSaidaValorHoje) elSaidaValorHoje.innerText = "R$ " + valorSaidas.toFixed(2).replace('.', ',');
+            }
+        } catch (errSaida) {
+            console.error("Erro ao buscar saidas p/ os cards", errSaida);
+        }
+
+        // Total de Fornecedores
+        if (elTotalFornecedores) {
             try {
-                const resSaidas = await fetch(`${API_URL}/saidas`);
-                if (resSaidas.ok) {
-                    const logSaidas = await resSaidas.json();
-                    let qtdSaidas = 0;
-                    let valorSaidas = 0;
-                    logSaidas.forEach(req => {
-                        const dataS = new Date(req.data);
-                        dataS.setHours(0, 0, 0, 0);
-                        if (dataS.getTime() === hojeObj.getTime()) {
-                            qtdSaidas += req.quantidade || 0;
-                            valorSaidas += Number(req.valor_total) || 0;
-                        }
-                    });
-                    if (elSaidaSaidasHoje) elSaidaSaidasHoje.innerText = qtdSaidas;
-                    if (elSaidaValorHoje) elSaidaValorHoje.innerText = "R$ " + valorSaidas.toFixed(2);
+                const resForn = await fetch(`${API_URL}/fornecedores`);
+                if (resForn.ok) {
+                    const fornecedores = await resForn.json();
+                    elTotalFornecedores.innerText = fornecedores.length;
                 }
-            } catch (errSaida) {
-                console.error("Erro ao buscar saidas p/ os cards", errSaida);
+            } catch (errForn) {
+                console.error("Erro ao buscar fornecedores p/ o card", errForn);
             }
         }
 
@@ -244,6 +259,7 @@ async function atualizarCards() {
         console.error(error);
     }
 }
+
 
 
 // ===============================
