@@ -6,9 +6,105 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Controle de Estoque</title>
   <link rel="stylesheet" href="styles.css">
+
+  <!-- ====== AURORA EXCLUSIVO DO INDEX ====== -->
+  <style>
+    /* Fundo escuro apenas nesta página */
+    body {
+      background: #0d1117 !important;
+    }
+
+    /* Blob 1 — Indigo/Roxo (topo esquerdo) */
+    body::before {
+      content: '';
+      position: fixed;
+      width: 700px;
+      height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #4f46e5 0%, #7c3aed 60%, transparent 100%);
+      filter: blur(80px);
+      opacity: 0.85;
+      top: -200px;
+      left: -120px;
+      z-index: 0;
+      pointer-events: none;
+      animation: auroraFloat 13s ease-in-out infinite alternate;
+    }
+
+    /* Blob 2 — Teal/Verde (baixo direito) */
+    body::after {
+      content: '';
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #0d9488 0%, #059669 50%, transparent 100%);
+      filter: blur(80px);
+      opacity: 0.8;
+      bottom: -100px;
+      right: -80px;
+      z-index: 0;
+      pointer-events: none;
+      animation: auroraFloat 16s ease-in-out infinite alternate;
+      animation-delay: -6s;
+    }
+
+    /* Blob 3 — Rosa/Roxo (centro) */
+    .aurora-center-blob {
+      position: fixed;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #8b5cf6 0%, #ec4899 60%, transparent 100%);
+      filter: blur(80px);
+      opacity: 0.6;
+      top: 50%;
+      left: 55%;
+      transform: translate(-50%, -50%);
+      z-index: 0;
+      pointer-events: none;
+      animation: auroraFloat 19s ease-in-out infinite alternate;
+      animation-delay: -3s;
+    }
+
+    @keyframes auroraFloat {
+      0%   { transform: translate(0, 0) scale(1); }
+      33%  { transform: translate(40px, -30px) scale(1.08); }
+      66%  { transform: translate(-20px, 20px) scale(0.96); }
+      100% { transform: translate(30px, 40px) scale(1.05); }
+    }
+
+    /* main-inicio transparente para o aurora aparecer */
+    .main-inicio {
+      background: transparent !important;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Content area com glassmorphism sobre o aurora */
+    .main-inicio .content-area {
+      background: rgba(255, 255, 255, 0.55) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Footer ajustado para fundo escuro */
+    .tela-inicio {
+      background: rgba(8, 12, 20, 0.65) !important;
+      color: rgba(255, 255, 255, 0.85) !important;
+      backdrop-filter: blur(10px) !important;
+      -webkit-backdrop-filter: blur(10px) !important;
+      width: 100% !important;
+      left: 0 !important;
+    }
+  </style>
 </head>
 
 <body>
+  <!-- Blob central da aurora (exclusivo do index) -->
+  <div class="aurora-center-blob"></div>
   <main class="main-inicio">
     <div class="content-area">
       <div class="dashboard-header">
@@ -16,7 +112,8 @@
         <div class="search-wrapper">
           <div class="search-container">
             <span class="search-icon">🔍</span>
-            <input type="text" placeholder="Buscar por produtos, pedidos ou fornecedores..." id="main-search" autocomplete="off">
+            <input type="text" placeholder="Buscar por produtos, pedidos ou fornecedores..." id="main-search"
+              autocomplete="off">
           </div>
           <div id="search-results-dropdown" class="search-results-dropdown"></div>
         </div>

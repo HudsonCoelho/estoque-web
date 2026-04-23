@@ -1070,7 +1070,9 @@ btn-salvar {
 .app-container {
   display: flex;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Cor de fundo roxa */
+  background: transparent; /* O fundo fica no body com aurora */
+  position: relative;
+  z-index: 1;
 }
 
 /* Largura do menu lateral */
