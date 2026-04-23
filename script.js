@@ -1155,3 +1155,148 @@ if (document.getElementById("lista-saidas")) {
     listarSaidasHistorico();
 }
 // Fim do script frontend
+
+// ===============================
+// BUSCA GLOBAL (index.html)
+// ===============================
+(function () {
+    const inputBuscaGlobal = document.getElementById('main-search');
+    const dropdown = document.getElementById('search-results-dropdown');
+
+    if (!inputBuscaGlobal || !dropdown) return;
+
+    let debounceTimer = null;
+
+    // Normaliza texto para comparação (sem acentos, lowercase)
+    function normalizar(str) {
+        if (!str) return '';
+        return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+    }
+
+    // Destaca o trecho pesquisado no nome
+    function highlight(texto, termo) {
+        if (!termo) return texto;
+        const escapado = termo.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        return texto.replace(new RegExp(`(${escapado})`, 'gi'), '<mark>$1</mark>');
+    }
+
+    function fecharDropdown() {
+        dropdown.classList.remove('show');
+        dropdown.innerHTML = '';
+    }
+
+    function renderDropdown(produtos, fornecedores, termo) {
+        dropdown.innerHTML = '';
+
+        const totalResultados = produtos.length + fornecedores.length;
+
+        if (totalResultados === 0) {
+            dropdown.innerHTML = `<div class="search-no-result">😕 Nenhum resultado para "<strong>${termo}</strong>"</div>`;
+            dropdown.classList.add('show');
+            return;
+        }
+
+        // ---------- PRODUTOS ----------
+        if (produtos.length > 0) {
+            const labelProdutos = document.createElement('div');
+            labelProdutos.className = 'search-group-label';
+            labelProdutos.textContent = `📦 Produtos (${produtos.length})`;
+            dropdown.appendChild(labelProdutos);
+
+            produtos.slice(0, 6).forEach(p => {
+                const item = document.createElement('div');
+                item.className = 'search-result-item';
+                item.innerHTML = `
+                    <div class="result-icon">📦</div>
+                    <div class="result-info">
+                        <div class="result-name">${highlight(p.nome, termo)}</div>
+                        <div class="result-sub">Cód: ${p.codigo_barras || '—'} · Qtd: ${p.quantidade} · R$ ${Number(p.preco_venda).toFixed(2)}</div>
+                    </div>
+                    <span class="result-badge produto">Produto</span>
+                `;
+                item.addEventListener('mousedown', () => {
+                    window.location.href = `produtos.html`;
+                });
+                dropdown.appendChild(item);
+            });
+        }
+
+        // ---------- FORNECEDORES ----------
+        if (fornecedores.length > 0) {
+            const labelForn = document.createElement('div');
+            labelForn.className = 'search-group-label';
+            labelForn.textContent = `🏢 Fornecedores (${fornecedores.length})`;
+            dropdown.appendChild(labelForn);
+
+            fornecedores.slice(0, 4).forEach(f => {
+                const item = document.createElement('div');
+                item.className = 'search-result-item';
+                item.innerHTML = `
+                    <div class="result-icon">🏢</div>
+                    <div class="result-info">
+                        <div class="result-name">${highlight(f.nome, termo)}</div>
+                        <div class="result-sub">CNPJ: ${f.cnpj || '—'} · ${f.email || ''}</div>
+                    </div>
+                    <span class="result-badge fornecedor">Fornecedor</span>
+                `;
+                item.addEventListener('mousedown', () => {
+                    window.location.href = `fornecedores.html`;
+                });
+                dropdown.appendChild(item);
+            });
+        }
+
+        dropdown.classList.add('show');
+    }
+
+    async function buscarGlobal(termo) {
+        const termoNorm = normalizar(termo);
+        if (!termoNorm) { fecharDropdown(); return; }
+
+        try {
+            const [resProdutos, resFornecedores] = await Promise.all([
+                fetch(`${API_URL}/produtos`),
+                fetch(`${API_URL}/fornecedores`)
+            ]);
+
+            const produtos = resProdutos.ok ? await resProdutos.json() : [];
+            const fornecedores = resFornecedores.ok ? await resFornecedores.json() : [];
+
+            const produtosFiltrados = produtos.filter(p =>
+                normalizar(p.nome).includes(termoNorm) ||
+                (p.codigo_barras && p.codigo_barras.includes(termo.trim())) ||
+                normalizar(p.categoria).includes(termoNorm)
+            );
+
+            const fornecedoresFiltrados = fornecedores.filter(f =>
+                normalizar(f.nome).includes(termoNorm) ||
+                (f.cnpj && f.cnpj.replace(/\D/g, '').includes(termo.replace(/\D/g, '')))
+            );
+
+            renderDropdown(produtosFiltrados, fornecedoresFiltrados, termo.trim());
+        } catch (err) {
+            console.error('Erro na busca global:', err);
+        }
+    }
+
+    inputBuscaGlobal.addEventListener('input', () => {
+        clearTimeout(debounceTimer);
+        const termo = inputBuscaGlobal.value.trim();
+        if (!termo) { fecharDropdown(); return; }
+        debounceTimer = setTimeout(() => buscarGlobal(termo), 300);
+    });
+
+    inputBuscaGlobal.addEventListener('blur', () => {
+        setTimeout(fecharDropdown, 200);
+    });
+
+    document.addEventListener('mousedown', (e) => {
+        if (!dropdown.contains(e.target) && e.target !== inputBuscaGlobal) {
+            fecharDropdown();
+        }
+    });
+
+    inputBuscaGlobal.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') fecharDropdown();
+    });
+})();

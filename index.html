@@ -13,9 +13,12 @@
     <div class="content-area">
       <div class="dashboard-header">
         <h1>Painel de Controle</h1>
-        <div class="search-container">
-          <span class="search-icon">🔍</span>
-          <input type="text" placeholder="Buscar por produtos, pedidos ou fornecedores..." id="main-search">
+        <div class="search-wrapper">
+          <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder="Buscar por produtos, pedidos ou fornecedores..." id="main-search" autocomplete="off">
+          </div>
+          <div id="search-results-dropdown" class="search-results-dropdown"></div>
         </div>
         <p>Acesso rápido aos módulos do sistema</p>
       </div>
