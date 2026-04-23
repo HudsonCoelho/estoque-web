@@ -115,18 +115,18 @@ app.post("/produtos", (req, res) => {
 
     db.query(
         sql, [
-            codigo_barras,
-            nome,
-            categoria,
-            descricao,
-            fornecedor_id,
-            unidade,
-            quantidade,
-            estoque_min,
-            preco_compra,
-            preco_venda,
-            url_imagem
-        ],
+        codigo_barras,
+        nome,
+        categoria,
+        descricao,
+        fornecedor_id,
+        unidade,
+        quantidade,
+        estoque_min,
+        preco_compra,
+        preco_venda,
+        url_imagem
+    ],
         (err, result) => {
             if (err) {
                 console.error(err);
@@ -146,12 +146,12 @@ app.post("/produtos", (req, res) => {
 
             db.query(
                 sqlMov, [
-                    produtoId,
-                    quantidade,
-                    preco_compra,
-                    preco_compra,
-                    nota_fiscal || ""
-                ],
+                produtoId,
+                quantidade,
+                preco_compra,
+                preco_compra,
+                nota_fiscal || ""
+            ],
                 (errMov) => {
                     if (errMov) {
                         console.error("Erro ao registrar movimentação:", errMov);
@@ -306,13 +306,13 @@ app.post("/saidas", (req, res) => {
 
                 db.query(
                     sqlMov, [
-                        produto_id,
-                        quantidade,
-                        valor_unitario || 0,
-                        produto.preco_compra || 0,
-                        motivo || "Saída",
-                        observacao || ""
-                    ],
+                    produto_id,
+                    quantidade,
+                    valor_unitario || 0,
+                    produto.preco_compra || 0,
+                    motivo || "Saída",
+                    observacao || ""
+                ],
                     (err) => {
                         if (err)
                             return res.status(500).json({ erro: "Erro ao registrar a movimentação." });
@@ -362,7 +362,7 @@ app.get("/movimentacoes", (req, res) => {
 // ========================
 // CONSULTA DE GTIN (API EXTERNA)
 // ========================
-app.get("/consultar/:gtin", async(req, res) => {
+app.get("/consultar/:gtin", async (req, res) => {
     const { gtin } = req.params;
 
     try {

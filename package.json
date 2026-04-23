@@ -15,7 +15,7 @@
         "api",
         "estoque"
     ],
-    "author": "Mateus Oliveira",
+    "author": "Hudson Coelho",
     "license": "ISC",
     "dependencies": {
         "cors": "^2.8.6",

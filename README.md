@@ -121,8 +121,8 @@ Para reportar problemas ou sugerir novas features em nossa integração, por fav
 
 ---
 
-## 👨‍💻 Autores
+## 👨‍💻 Autor
 
-Desenvolvido por **Gabriela**, **Pedro**, **Matheus**, **Murilo** e **Hudson**.
+Desenvolvido por **Hudson Coelho**.
 
 **Data da Última Atualização:** Abril de 2026
